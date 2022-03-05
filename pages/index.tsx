@@ -1,17 +1,19 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { MdKeyboardArrowDown } from "react-icons/md";
+import Card from "../components/Card";
 
 import Navbar from "../components/Navbar";
 
 const filterOptions = ["Africa", "America", "Asia", "Europe", "Oceania"];
 
-const HomePage = () => {
+const HomePage = (props) => {
   const [search, setSearch] = useState("");
   const [currentFilter, setCurrentFilter] = useState("Filter by Region");
   const [filterOpen, setFilterOpen] = useState(false);
 
-  const handleFiltersText = (text) => {
+  const handleFiltersText = (text: string) => {
     setCurrentFilter(text);
     setFilterOpen(false);
   };
@@ -43,6 +45,7 @@ const HomePage = () => {
                 <div className="options">
                   {filterOptions.map((el) => (
                     <div
+                      key={el}
                       onClick={() => handleFiltersText(el)}
                       className="option"
                     >
@@ -53,6 +56,12 @@ const HomePage = () => {
               ) : null}
             </div>
           </div>
+
+          <div className="countries">
+            {props.data.map((el, i: number) => (
+              <Card cardData={el} key={i} />
+            ))}
+          </div>
         </main>
       </div>
       <style jsx>
@@ -60,8 +69,7 @@ const HomePage = () => {
           .app-container {
             background-color: #fafafa;
             padding: 12px;
-            margin-top: 64px;
-            height: 100vh;
+            padding-top: 86px;
           }
 
           .sub-navbar {
@@ -122,7 +130,7 @@ const HomePage = () => {
 
           .options {
             position: absolute;
-            margin-top: 2px;
+            margin-top: 4px;
             background-color: #fff;
             width: 200px;
             border-radius: 4px;
@@ -137,10 +145,36 @@ const HomePage = () => {
           .option {
             padding: 4px 16px;
           }
+
+          .countries {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 36px;
+            gap: 36px;
+          }
         `}
       </style>
     </>
   );
+};
+
+export const getStaticProps = async () => {
+  try {
+    const { data } = await axios.get("https://restcountries.com/v3.1/all");
+    return {
+      props: {
+        data,
+      },
+    };
+  } catch (err) {
+    return {
+      props: {
+        data: [],
+      },
+      notFound: true,
+    };
+  }
 };
 
 export default HomePage;

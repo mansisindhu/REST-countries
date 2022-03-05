@@ -19,6 +19,7 @@ const Navbar = () => {
             right: 0;
             left: 0;
             box-shadow: 0 1px 5px rgb(0 0 0 / 20%);
+            z-index: 1;
           }
 
           .heading {
