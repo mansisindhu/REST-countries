@@ -1,8 +1,10 @@
+import Image from "next/image";
+
 const Card = ({ cardData }) => {
   return (
     <>
       <div className="card">
-        <img className="flag" src={cardData.flags.png} alt="flag" />
+        <Image className="flag" src={cardData.flags.png} alt="flag" />
         <div className="details">
           <p className="name">{cardData.name.common}</p>
           <div className="info-section">
