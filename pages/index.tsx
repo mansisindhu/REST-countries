@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import Card from "../components/Card";
@@ -12,11 +12,53 @@ const HomePage = (props) => {
   const [search, setSearch] = useState("");
   const [currentFilter, setCurrentFilter] = useState("Filter by Region");
   const [filterOpen, setFilterOpen] = useState(false);
+  const [countries, setCountries] = useState([]);
+  const [isLoading, setLoading] = useState(false);
 
-  const handleFiltersText = (text: string) => {
-    setCurrentFilter(text);
-    setFilterOpen(false);
+  const handleFiltersText = useCallback(
+    (text: string) => {
+      setCurrentFilter(text);
+      setFilterOpen(false);
+    },
+    [search]
+  );
+
+  const ref = useRef(null);
+
+  const debounce = (func: Function, delay: number) => {
+    if (ref.current) {
+      clearInterval(ref.current);
+    }
+    ref.current = setTimeout(func, delay);
   };
+
+  const getCountriesOnSearch = useCallback(async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.get(
+        `https://restcountries.com/v3.1/name/${search}`
+      );
+      setCountries(data);
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+      setCountries([]);
+    }
+  }, [search]);
+
+  const debounced = () => {
+    debounce(getCountriesOnSearch, 1000);
+  };
+
+  useEffect(() => {
+    if (search) {
+      debounced();
+    }
+  }, [search]);
+
+  useEffect(() => {
+    setCountries(props.data);
+  }, []);
 
   return (
     <>
@@ -58,9 +100,13 @@ const HomePage = (props) => {
           </div>
 
           <div className="countries">
-            {props.data.map((el, i: number) => (
-              <Card cardData={el} key={i} />
-            ))}
+            {isLoading ? (
+              <h1>Loading...</h1>
+            ) : countries.length ? (
+              countries.map((el, i: number) => <Card cardData={el} key={i} />)
+            ) : (
+              <h1>No data found.</h1>
+            )}
           </div>
         </main>
       </div>
