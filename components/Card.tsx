@@ -4,7 +4,9 @@ const Card = ({ cardData }) => {
   return (
     <>
       <div className="card">
-        <Image className="flag" src={cardData.flags.png} alt="flag" />
+        <div className="flag">
+          <Image src={cardData.flags.png} alt="flag" width={268} height={150} />
+        </div>
         <div className="details">
           <p className="name">{cardData.name.common}</p>
           <div className="info-section">
