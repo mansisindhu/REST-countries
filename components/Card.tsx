@@ -5,7 +5,7 @@ const Card = ({ cardData }) => {
     <>
       <div className="card">
         <div className="flag">
-          <Image src={cardData.flags.png} alt="flag" width={268} height={150} />
+          <Image src={cardData.flags.png} alt="flag" width={232} height={150}/>
         </div>
         <div className="details">
           <p className="name">{cardData.name.common}</p>
@@ -27,15 +27,15 @@ const Card = ({ cardData }) => {
         {`
           .card {
             height: 320px;
-            width: 268px;
+            width: 232px;
             box-shadow: 0 1px 5px #00000033;
-            border-radius: 8px;
+            border-radius: 4px;
           }
 
-          .flag {
+          .flag :global(img) {
             width: 100%;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
             height: 150px;
             object-fit: cover;
           }

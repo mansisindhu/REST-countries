@@ -1,25 +1,30 @@
 const Navbar = () => {
   return (
     <>
-      <nav className="navbar">
-        <p className="heading">Where in the world?</p>
-        <button className="theme-toggler">Theme Toggle</button>
+      <nav className="navbar-wrapper">
+        <div className="navbar">
+          <p className="heading">Where in the world?</p>
+          <button className="theme-toggler">Theme Toggle</button>
+        </div>
       </nav>
 
       <style jsx>
         {`
-          .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 24px 10px;
+          .navbar-wrapper {
             background-color: #fff;
             position: fixed;
             top: 0;
             right: 0;
             left: 0;
             box-shadow: 0 1px 5px rgb(0 0 0 / 20%);
-            z-index: 1;
+            z-index: 2;
+            padding: 24px 10px;
+          }
+
+          .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
           }
 
           .heading {
@@ -31,6 +36,13 @@ const Navbar = () => {
             border: none;
             background-color: #fff;
             font-size: 13px;
+          }
+
+          @media (min-width: 768px) {
+            .navbar {
+              max-width: 1000px;
+              margin: auto;
+            }
           }
         `}
       </style>

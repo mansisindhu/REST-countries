@@ -83,7 +83,7 @@ const HomePage = (props) => {
             align-items: center;
             padding: 18px;
             background-color: #fff;
-            border-radius: 4px;
+            border-radius: 3px;
             box-shadow: 0 1px 5px rgb(0 0 0 / 20%);
             font-size: 16px;
             gap: 12px;
@@ -117,11 +117,12 @@ const HomePage = (props) => {
             align-items: center;
             padding: 18px;
             background-color: #fff;
-            border-radius: 4px;
+            border-radius: 3px;
             box-shadow: 0 1px 5px rgb(0 0 0 / 20%);
             gap: 12px;
             justify-content: space-between;
             cursor: pointer;
+            width: 200px;
           }
 
           .filter-heading > p {
@@ -133,13 +134,14 @@ const HomePage = (props) => {
             margin-top: 4px;
             background-color: #fff;
             width: 200px;
-            border-radius: 4px;
+            border-radius: 3px;
             display: flex;
             flex-direction: column;
             gap: 4px;
             font-size: 12px;
             box-shadow: 0 1px 5px rgb(0 0 0 / 20%);
             padding: 12px 0px;
+            z-index: 1;
           }
 
           .option {
@@ -152,6 +154,29 @@ const HomePage = (props) => {
             align-items: center;
             margin-top: 36px;
             gap: 36px;
+          }
+
+          @media (min-width: 768px) {
+            .main {
+              max-width: 1120px;
+              margin: auto;
+            }
+
+            .sub-navbar {
+              flex-direction: row;
+              justify-content: space-between;
+            }
+
+            .search {
+              min-width: 400px;
+            }
+
+            .countries {
+              flex-direction: row;
+              flex-wrap: wrap;
+              justify-content: center;
+              gap: 64px;
+            }
           }
         `}
       </style>
