@@ -7,6 +7,7 @@ import Card from "../components/Card";
 import Navbar from "../components/Navbar";
 
 const filterOptions = ["Africa", "America", "Asia", "Europe", "Oceania"];
+const mainUrl = `https://restcountries.com/v3.1/all`;
 
 const HomePage = (props) => {
   const [search, setSearch] = useState("");
@@ -22,21 +23,24 @@ const HomePage = (props) => {
     },
     [search]
   );
-
-  const ref = useRef(null);
+  
+  const isMounted = useRef(null);
+  const timerId = useRef(null);
 
   const debounce = (func: Function, delay: number) => {
-    if (ref.current) {
-      clearInterval(ref.current);
+    if (timerId.current) {
+      clearInterval(timerId.current);
     }
-    ref.current = setTimeout(func, delay);
+    timerId.current = setTimeout(func, delay);
   };
 
   const getCountriesOnSearch = useCallback(async () => {
+    const queryUrl = `https://restcountries.com/v3.1/name/${search}`;
+
     try {
       setLoading(true);
       const { data } = await axios.get(
-        `https://restcountries.com/v3.1/name/${search}`
+        search ? queryUrl : mainUrl
       );
       setCountries(data);
       setLoading(false);
@@ -51,13 +55,14 @@ const HomePage = (props) => {
   };
 
   useEffect(() => {
-    if (search) {
+    if (isMounted.current) {
       debounced();
     }
   }, [search]);
 
   useEffect(() => {
     setCountries(props.data);
+    isMounted.current = true;
   }, []);
 
   return (
@@ -232,7 +237,7 @@ const HomePage = (props) => {
 
 export const getStaticProps = async () => {
   try {
-    const { data } = await axios.get("https://restcountries.com/v3.1/all");
+    const { data } = await axios.get(mainUrl);
     return {
       props: {
         data,
