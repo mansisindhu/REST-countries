@@ -39,7 +39,6 @@ const HomePage = (props: any) => {
   };
 
   const getCountriesOnSearch = useCallback(async () => {
-    Router.replace(`${Router.basePath}?search=${search}`);
     const queryUrl = `${baseUrl}name/${search}`;
     try {
       setLoading(true);
@@ -57,7 +56,6 @@ const HomePage = (props: any) => {
   };
 
   const filterByRegion = useCallback(async () => {
-    Router.replace(`${Router.basePath}?region=${currentFilter}`);
     try {
       setLoading(true);
       const { data } = await axios.get(`${baseUrl}region/${currentFilter}`);
@@ -71,12 +69,18 @@ const HomePage = (props: any) => {
 
   useEffect(() => {
     if (isMounted.current) {
+      if (search) {
+        Router.replace(`${Router.basePath}?search=${search}`);
+      } else {
+        Router.replace(`${Router.basePath}`);
+      }
       debounced();
     }
   }, [search]);
 
   useEffect(() => {
     if (isMounted.current) {
+      Router.replace(`${Router.basePath}?region=${currentFilter}`);
       filterByRegion();
     }
   }, [currentFilter]);
@@ -270,12 +274,13 @@ const HomePage = (props: any) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const query = context.query;
   try {
     const { data } = await axios.get(
-      context.query.search
-        ? `${baseUrl}name/${context.query.search}`
-        : context.query.region
-        ? `${baseUrl}region/${context.query.region}`
+      query.search
+        ? `${baseUrl}name/${query.search}`
+        : query.region
+        ? `${baseUrl}region/${query.region}`
         : mainUrl
     );
     return {
