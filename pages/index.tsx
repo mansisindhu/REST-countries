@@ -123,7 +123,7 @@ const HomePage = (props: any) => {
 
           <div className="countries">
             {isLoading ? (
-              <h1>Loading...</h1>
+              <h1 className="loading">Loading...</h1>
             ) : countries.length ? (
               countries.map((el, i: number) => <Card cardData={el} key={i} />)
             ) : (
@@ -164,6 +164,7 @@ const HomePage = (props: any) => {
           .search > input {
             border: none;
             font-size: 12px;
+            width: 100%;
           }
 
           .search > input:focus {
@@ -191,6 +192,7 @@ const HomePage = (props: any) => {
             justify-content: space-between;
             cursor: pointer;
             width: 200px;
+            font-weight: 600;
           }
 
           .filter-heading > p {
@@ -214,6 +216,7 @@ const HomePage = (props: any) => {
 
           .option {
             padding: 4px 16px;
+            cursor: pointer;
           }
 
           .countries {
@@ -222,6 +225,14 @@ const HomePage = (props: any) => {
             align-items: center;
             margin-top: 36px;
             gap: 36px;
+            height: 75vh;
+          }
+
+          .loading {
+            height: 75vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
           }
 
           @media (min-width: 768px) {

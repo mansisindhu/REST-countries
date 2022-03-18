@@ -40,7 +40,7 @@ const Navbar = () => {
 
           @media (min-width: 768px) {
             .navbar {
-              max-width: 1000px;
+              max-width: 1120px;
               margin: auto;
             }
           }
