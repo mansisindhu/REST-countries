@@ -4,6 +4,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { GetServerSideProps } from "next";
 import Router from "next/router";
+import Link from "next/link";
 
 import Card from "../components/Card";
 import Navbar from "../components/Navbar";
@@ -135,7 +136,13 @@ const HomePage = (props: any) => {
             {isLoading ? (
               <h1 className="loading">Loading...</h1>
             ) : countries.length ? (
-              countries.map((el, i: number) => <Card cardData={el} key={i} />)
+              countries.map((el: any, i: number) => (
+                <Link href={`/${el.cca2}`}>
+                  <a>
+                    <Card cardData={el} key={i} />
+                  </a>
+                </Link>
+              ))
             ) : (
               <h1>No data found.</h1>
             )}
