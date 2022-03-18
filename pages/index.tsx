@@ -1,15 +1,15 @@
 import axios from "axios";
-import { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { MdKeyboardArrowDown } from "react-icons/md";
-import Card from "../components/Card";
 
+import Card from "../components/Card";
 import Navbar from "../components/Navbar";
 
 const filterOptions = ["Africa", "America", "Asia", "Europe", "Oceania"];
 const mainUrl = `https://restcountries.com/v3.1/all`;
 
-const HomePage = (props) => {
+const HomePage = (props: any) => {
   const [search, setSearch] = useState("");
   const [currentFilter, setCurrentFilter] = useState("Filter by Region");
   const [filterOpen, setFilterOpen] = useState(false);
@@ -23,7 +23,7 @@ const HomePage = (props) => {
     },
     [search]
   );
-  
+
   const isMounted = useRef(null);
   const timerId = useRef(null);
 
@@ -36,12 +36,9 @@ const HomePage = (props) => {
 
   const getCountriesOnSearch = useCallback(async () => {
     const queryUrl = `https://restcountries.com/v3.1/name/${search}`;
-
     try {
       setLoading(true);
-      const { data } = await axios.get(
-        search ? queryUrl : mainUrl
-      );
+      const { data } = await axios.get(search ? queryUrl : mainUrl);
       setCountries(data);
       setLoading(false);
     } catch (err) {
@@ -54,11 +51,31 @@ const HomePage = (props) => {
     debounce(getCountriesOnSearch, 1000);
   };
 
+  const filterByRegion = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.get(
+        `https://restcountries.com/v3.1/region/${currentFilter}`
+      );
+      setCountries(data);
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+      setCountries([]);
+    }
+  };
+
   useEffect(() => {
     if (isMounted.current) {
       debounced();
     }
   }, [search]);
+
+  useEffect(() => {
+    if (isMounted.current) {
+      filterByRegion();
+    }
+  }, [currentFilter]);
 
   useEffect(() => {
     setCountries(props.data);
