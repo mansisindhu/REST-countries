@@ -2,24 +2,28 @@ import axios from "axios";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { MdKeyboardArrowDown } from "react-icons/md";
+import { GetServerSideProps } from "next";
+import Router from "next/router";
 
 import Card from "../components/Card";
 import Navbar from "../components/Navbar";
 
 const filterOptions = ["Africa", "America", "Asia", "Europe", "Oceania"];
-const mainUrl = `https://restcountries.com/v3.1/all`;
+const baseUrl = "https://restcountries.com/v3.1/";
+const mainUrl = `${baseUrl}all`;
 
 const HomePage = (props: any) => {
   const [search, setSearch] = useState("");
   const [currentFilter, setCurrentFilter] = useState("Filter by Region");
   const [filterOpen, setFilterOpen] = useState(false);
-  const [countries, setCountries] = useState([]);
+  const [countries, setCountries] = useState(props.data || []);
   const [isLoading, setLoading] = useState(false);
 
   const handleFiltersText = useCallback(
     (text: string) => {
       setCurrentFilter(text);
       setFilterOpen(false);
+      setSearch("");
     },
     [search]
   );
@@ -35,7 +39,8 @@ const HomePage = (props: any) => {
   };
 
   const getCountriesOnSearch = useCallback(async () => {
-    const queryUrl = `https://restcountries.com/v3.1/name/${search}`;
+    Router.replace(`${Router.basePath}?search=${search}`);
+    const queryUrl = `${baseUrl}name/${search}`;
     try {
       setLoading(true);
       const { data } = await axios.get(search ? queryUrl : mainUrl);
@@ -51,19 +56,18 @@ const HomePage = (props: any) => {
     debounce(getCountriesOnSearch, 1000);
   };
 
-  const filterByRegion = async () => {
+  const filterByRegion = useCallback(async () => {
+    Router.replace(`${Router.basePath}?region=${currentFilter}`);
     try {
       setLoading(true);
-      const { data } = await axios.get(
-        `https://restcountries.com/v3.1/region/${currentFilter}`
-      );
+      const { data } = await axios.get(`${baseUrl}region/${currentFilter}`);
       setCountries(data);
       setLoading(false);
     } catch (err) {
       setLoading(false);
       setCountries([]);
     }
-  };
+  }, [currentFilter]);
 
   useEffect(() => {
     if (isMounted.current) {
@@ -78,7 +82,6 @@ const HomePage = (props: any) => {
   }, [currentFilter]);
 
   useEffect(() => {
-    setCountries(props.data);
     isMounted.current = true;
   }, []);
 
@@ -93,7 +96,10 @@ const HomePage = (props: any) => {
               <input
                 type="text"
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setCurrentFilter("Filter by Region");
+                }}
                 placeholder="Search for a country..."
               />
             </div>
@@ -263,9 +269,15 @@ const HomePage = (props: any) => {
   );
 };
 
-export const getStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
-    const { data } = await axios.get(mainUrl);
+    const { data } = await axios.get(
+      context.query.search
+        ? `${baseUrl}name/${context.query.search}`
+        : context.query.region
+        ? `${baseUrl}region/${context.query.region}`
+        : mainUrl
+    );
     return {
       props: {
         data,
