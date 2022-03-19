@@ -137,9 +137,9 @@ const HomePage = (props: any) => {
               <h1 className="loading">Loading...</h1>
             ) : countries.length ? (
               countries.map((el: any, i: number) => (
-                <Link href={`/${el.cca2}`}>
+                <Link href={`/${el.cca2}`} key={i}>
                   <a>
-                    <Card cardData={el} key={i} />
+                    <Card cardData={el} />
                   </a>
                 </Link>
               ))
