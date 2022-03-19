@@ -12,6 +12,7 @@ import Navbar from "../components/Navbar";
 const filterOptions = ["Africa", "America", "Asia", "Europe", "Oceania"];
 const baseUrl = "https://restcountries.com/v3.1/";
 const mainUrl = `${baseUrl}all`;
+let controller = null;
 
 const HomePage = (props: any) => {
   const [search, setSearch] = useState(props.search || "");
@@ -46,9 +47,15 @@ const HomePage = (props: any) => {
 
   const getCountriesOnSearch = useCallback(async () => {
     const queryUrl = `${baseUrl}name/${search}`;
+    if (controller) {
+      controller.abort();
+    }
+    controller = new AbortController();
     try {
       setLoading(true);
-      const { data } = await axios.get(search ? queryUrl : mainUrl);
+      const { data } = await axios.get(search ? queryUrl : mainUrl, {
+        signal: controller.signal,
+      });
       setCountries(data);
       setLoading(false);
     } catch (err) {
