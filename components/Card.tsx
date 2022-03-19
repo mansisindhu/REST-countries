@@ -1,11 +1,21 @@
 import Image from "next/image";
+import { AnimatePresence, motion } from "framer-motion";
 
 const Card = ({ cardData }) => {
   return (
     <>
       <div className="card">
         <div className="flag">
-          <Image src={cardData.flags.svg} alt="flag" width={232} height={150} />
+          <AnimatePresence key={cardData.cca2}>
+            <motion.img
+              layoutId={`card-image-container-${cardData.cca2}`}
+              src={cardData.flags.svg}
+              alt="flag"
+              width={232}
+              height={150}
+              key={cardData.cca2}
+            />
+          </AnimatePresence>
         </div>
         <div className="details">
           <p className="name">{cardData.name.common}</p>

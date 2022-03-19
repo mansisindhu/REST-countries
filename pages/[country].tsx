@@ -4,6 +4,7 @@ import { BsArrowLeft } from "react-icons/bs";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 import Navbar from "../components/Navbar";
 import { mainUrl } from "../utils";
@@ -38,12 +39,16 @@ const CountryPage = (props: any) => {
           <div className="wrapper">
             <div className="main-info">
               <div className="flag">
-                <Image
-                  src={data.flags?.svg}
-                  alt="flag"
-                  width={400}
-                  height={220}
-                />
+                <AnimatePresence key={data.cca2}>
+                  <motion.img
+                    layoutId={`card-image-container-${data.cca2}`}
+                    src={data.flags?.svg}
+                    alt="flag"
+                    width={400}
+                    height={220}
+                    key={data.cca2}
+                  />
+                </AnimatePresence>
               </div>
               <div className="details">
                 <p className="name">{data.name.common}</p>
