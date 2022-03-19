@@ -32,12 +32,15 @@ const HomePage = (props: any) => {
   const isMounted = useRef(null);
   const timerId = useRef(null);
 
-  const debounce = (func: Function, delay: number) => {
-    if (timerId.current) {
-      clearInterval(timerId.current);
-    }
-    timerId.current = setTimeout(func, delay);
-  };
+  const debounce = useCallback(
+    (func: Function, delay: number) => {
+      if (timerId.current) {
+        clearInterval(timerId.current);
+      }
+      timerId.current = setTimeout(func, delay);
+    },
+    [timerId.current]
+  );
 
   const getCountriesOnSearch = useCallback(async () => {
     const queryUrl = `${baseUrl}name/${search}`;
@@ -52,9 +55,9 @@ const HomePage = (props: any) => {
     }
   }, [search]);
 
-  const debounced = () => {
+  const debounced = useCallback(() => {
     debounce(getCountriesOnSearch, 1000);
-  };
+  }, [search]);
 
   const filterByRegion = useCallback(async () => {
     try {
@@ -71,9 +74,11 @@ const HomePage = (props: any) => {
   useEffect(() => {
     if (isMounted.current) {
       if (search) {
-        Router.replace(`${Router.basePath}?search=${search}`);
+        Router.replace(`${Router.basePath}?search=${search}`, undefined, {
+          shallow: true,
+        });
       } else {
-        Router.replace(`${Router.basePath}`);
+        Router.replace(`${Router.basePath}`, undefined, { shallow: true });
       }
       debounced();
     }
@@ -81,7 +86,9 @@ const HomePage = (props: any) => {
 
   useEffect(() => {
     if (isMounted.current) {
-      Router.replace(`${Router.basePath}?region=${currentFilter}`);
+      Router.replace(`${Router.basePath}?region=${currentFilter}`, undefined, {
+        shallow: true,
+      });
       filterByRegion();
     }
   }, [currentFilter]);
