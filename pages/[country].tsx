@@ -24,54 +24,61 @@ const CountryPage = (props: any) => {
             <BsArrowLeft />
             <p>Back</p>
           </div>
-          <div className="main-info">
-            <div className="flag">
-              <Image
-                src={data.flags?.svg}
-                alt="flag"
-                width={400}
-                height={220}
-              />
-            </div>
-            <div className="details">
-              <p className="name">{data.name.common}</p>
-              <div className="flex">
-                <div className="info">
-                  <p>
-                    Native Name:{" "}
-                    <span className="span">
-                      {data.name?.nativeName?.spa?.official || data.name.common}
-                    </span>
-                  </p>
-                  <p>
-                    Population:{" "}
-                    <span className="span">
-                      {data.population.toLocaleString()}
-                    </span>
-                  </p>
-                  <p>
-                    Region: <span className="span">{data.region}</span>
-                  </p>
-                  <p>
-                    Sub Region: <span className="span">{data.subregion}</span>
-                  </p>
-                  <p>
-                    Capital: <span className="span">{data.capital[0]}</span>
-                  </p>
-                </div>
-                <div className="info">
-                  <p>
-                    Top level domain:{" "}
-                    <span className="span">{data.tld[0]}</span>
-                  </p>
-                  <p>
-                    Currencies:{" "}
-                    <span className="span">{data.currencies?.GMD?.name}</span>
-                  </p>
-                  <p>
-                    Languages:{" "}
-                    <span className="span">{data.languages?.eng}</span>
-                  </p>
+          <div className="wrapper">
+            <div className="main-info">
+              <div className="flag">
+                <Image
+                  src={data.flags?.svg}
+                  alt="flag"
+                  width={400}
+                  height={220}
+                />
+              </div>
+              <div className="details">
+                <p className="name">{data.name.common}</p>
+                <div className="flex">
+                  <div className="info">
+                    <p>
+                      Native Name:{" "}
+                      <span className="span">
+                        {data.name?.nativeName?.spa?.official ||
+                          data.name.common}
+                      </span>
+                    </p>
+                    <p>
+                      Population:{" "}
+                      <span className="span">
+                        {data.population.toLocaleString()}
+                      </span>
+                    </p>
+                    <p>
+                      Region: <span className="span">{data.region}</span>
+                    </p>
+                    <p>
+                      Sub Region: <span className="span">{data.subregion}</span>
+                    </p>
+                    <p>
+                      Capital: <span className="span">{data.capital[0]}</span>
+                    </p>
+                  </div>
+                  <div className="info">
+                    <p>
+                      Top level domain:{" "}
+                      <span className="span">{data.tld[0]}</span>
+                    </p>
+                    <p>
+                      Currencies:{" "}
+                      <span className="span">
+                        {data.currencies?.GMD?.name || "N/A"}
+                      </span>
+                    </p>
+                    <p>
+                      Languages:{" "}
+                      <span className="span">
+                        {data.languages?.eng || "N/A"}
+                      </span>
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -145,6 +152,13 @@ const CountryPage = (props: any) => {
             .flex {
               display: flex;
               gap: 50px;
+            }
+
+            .wrapper {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              height: 65vh;
             }
           }
         `}
