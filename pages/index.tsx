@@ -14,8 +14,10 @@ const baseUrl = "https://restcountries.com/v3.1/";
 const mainUrl = `${baseUrl}all`;
 
 const HomePage = (props: any) => {
-  const [search, setSearch] = useState("");
-  const [currentFilter, setCurrentFilter] = useState("Filter by Region");
+  const [search, setSearch] = useState(props.search || "");
+  const [currentFilter, setCurrentFilter] = useState(
+    props.region || "Filter by Region"
+  );
   const [filterOpen, setFilterOpen] = useState(false);
   const [countries, setCountries] = useState(props.data || []);
   const [isLoading, setLoading] = useState(false);
@@ -23,7 +25,7 @@ const HomePage = (props: any) => {
   const handleFiltersText = useCallback(
     (text: string) => {
       setCurrentFilter(text);
-      setFilterOpen(false);
+      handleCloseFilters();
       setSearch("");
     },
     [search]
@@ -71,6 +73,23 @@ const HomePage = (props: any) => {
     }
   }, [currentFilter]);
 
+  const handleCloseFilters = useCallback(() => {
+    setFilterOpen(false);
+  }, []);
+
+  const handleSearch: React.ChangeEventHandler<HTMLInputElement> = useCallback(
+    (e) => {
+      setSearch(e.target.value);
+      setCurrentFilter("Filter by Region");
+    },
+    []
+  );
+
+  const handleFiltersSwitch = useCallback(
+    () => setFilterOpen((prev) => !prev),
+    []
+  );
+
   useEffect(() => {
     if (isMounted.current) {
       if (search) {
@@ -99,7 +118,10 @@ const HomePage = (props: any) => {
 
   return (
     <>
-      <div className="app-container">
+      <div
+        className="app-container"
+        onClick={filterOpen ? handleCloseFilters : null}
+      >
         <main className="main">
           <Navbar />
           <div className="sub-navbar">
@@ -108,18 +130,12 @@ const HomePage = (props: any) => {
               <input
                 type="text"
                 value={search}
-                onChange={(e) => {
-                  setSearch(e.target.value);
-                  setCurrentFilter("Filter by Region");
-                }}
+                onChange={handleSearch}
                 placeholder="Search for a country..."
               />
             </div>
             <div className="filters">
-              <div
-                className="filter-heading"
-                onClick={() => setFilterOpen((prev) => !prev)}
-              >
+              <div className="filter-heading" onClick={handleFiltersSwitch}>
                 <p>{currentFilter}</p>
                 <MdKeyboardArrowDown />
               </div>
@@ -249,11 +265,11 @@ const HomePage = (props: any) => {
             align-items: center;
             margin-top: 36px;
             gap: 36px;
-            height: 75vh;
+            min-height: 75vh;
           }
 
           .loading {
-            height: 75vh;
+            min-height: 75vh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -300,6 +316,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       props: {
         data,
+        region: query.region ? query.region : null,
+        search: query.search ? query.search : null,
       },
     };
   } catch (err) {
