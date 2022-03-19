@@ -3,9 +3,10 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import { BsArrowLeft } from "react-icons/bs";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useCallback } from "react";
 
 import Navbar from "../components/Navbar";
-import { useCallback } from "react";
+import { mainUrl } from "../utils";
 
 const CountryPage = (props: any) => {
   const router = useRouter();
@@ -15,7 +16,6 @@ const CountryPage = (props: any) => {
   }
 
   const { data } = props;
-  console.log(router);
 
   const handleReturn = useCallback(() => {
     const { history } = window;
@@ -199,8 +199,15 @@ export const getStaticProps: GetStaticProps = async (context) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
+  const { data: countries } = await axios.get(mainUrl);
+  const paths = countries.slice(0, 10).map((el: any) => {
+    return {
+      params: { country: el.cca2 },
+    };
+  });
+
   return {
-    paths: [],
+    paths,
     fallback: true,
   };
 };

@@ -8,10 +8,9 @@ import Link from "next/link";
 
 import Card from "../components/Card";
 import Navbar from "../components/Navbar";
+import { baseUrl, mainUrl } from "../utils";
 
 const filterOptions = ["Africa", "America", "Asia", "Europe", "Oceania"];
-const baseUrl = "https://restcountries.com/v3.1/";
-const mainUrl = `${baseUrl}all`;
 let controller = null;
 
 const HomePage = (props: any) => {
