@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 
 import Navbar from "../components/Navbar";
+import { useCallback } from "react";
 
 const CountryPage = (props: any) => {
   const router = useRouter();
@@ -14,13 +15,23 @@ const CountryPage = (props: any) => {
   }
 
   const { data } = props;
+  console.log(router);
+
+  const handleReturn = useCallback(() => {
+    const { history } = window;
+    if (history.state.idx === 0) {
+      router.push("/");
+    } else {
+      router.back();
+    }
+  }, []);
 
   return (
     <>
       <div className="app-container">
         <main className="main">
           <Navbar />
-          <div className="back" onClick={() => router.back()}>
+          <div className="back" onClick={handleReturn}>
             <BsArrowLeft />
             <p>Back</p>
           </div>
@@ -158,7 +169,7 @@ const CountryPage = (props: any) => {
               display: flex;
               justify-content: center;
               align-items: center;
-              height: 65vh;
+              min-height: 65vh;
             }
           }
         `}
