@@ -4,7 +4,6 @@ const Navbar = () => {
       <nav className="navbar-wrapper">
         <div className="navbar">
           <p className="heading">Where in the world?</p>
-          <button className="theme-toggler">Theme Toggle</button>
         </div>
       </nav>
 

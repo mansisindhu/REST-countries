@@ -5,7 +5,7 @@ const Card = ({ cardData }) => {
     <>
       <div className="card">
         <div className="flag">
-          <Image src={cardData.flags.png} alt="flag" width={232} height={150}/>
+          <Image src={cardData.flags.svg} alt="flag" width={232} height={150} />
         </div>
         <div className="details">
           <p className="name">{cardData.name.common}</p>
